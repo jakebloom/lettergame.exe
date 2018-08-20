@@ -20029,9 +20029,10 @@ class Board extends React.Component {
             if (this.state.letters[row][col] == null) {
                 return;
             }
-            console.log(row, col, this.state.letters[row][col], "clicked!");
             let neighbours = this.getNeighbours(row, col, this.state.letters[row][col]);
-            console.log(neighbours);
+            let selected = Array(8).fill(null).map(() => Array(16).fill(false));
+            neighbours.forEach((node) => { selected[node.row][node.col] = true; });
+            this.setState({ selected });
         };
     }
     componentWillMount() {
@@ -20054,7 +20055,7 @@ class Board extends React.Component {
         for (let row = 0; row < 8; row++) {
             let tilerow = [];
             for (let col = 0; col < 16; col++) {
-                tilerow.push(React.createElement(Letter_1.default, { col: col, key: String(row) + "." + String(col), letter: this.state.letters[row][col], onclick: this.onLetterClick, row: row, selected: false }));
+                tilerow.push(React.createElement(Letter_1.default, { col: col, key: String(row) + "." + String(col), letter: this.state.letters[row][col], onclick: this.onLetterClick, row: row, selected: this.state.selected[row][col] }));
             }
             tiles.push(tilerow);
         }
@@ -20124,7 +20125,7 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 class Letter extends React.Component {
     render() {
         let classes = this.props.selected ? "letter selected" : "letter";
-        return React.createElement("span", { className: "letter", onClick: () => this.props.onclick(this.props.row, this.props.col, this.props.letter) }, this.props.letter);
+        return React.createElement("span", { className: classes, onClick: () => this.props.onclick(this.props.row, this.props.col, this.props.letter) }, this.props.letter);
     }
 }
 exports.default = Letter;

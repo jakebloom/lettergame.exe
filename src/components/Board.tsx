@@ -44,7 +44,7 @@ export default class Board extends React.Component<{}, BoardState> {
                         letter={this.state.letters[row][col]}
                         onclick={this.onLetterClick}
                         row={row}
-                        selected={false}/>
+                        selected={this.state.selected[row][col]}/>
                   )
             }
             tiles.push(tilerow)
@@ -61,9 +61,10 @@ export default class Board extends React.Component<{}, BoardState> {
         if (this.state.letters[row][col] == null) {
             return
         }
-        console.log(row, col, this.state.letters[row][col], "clicked!")
         let neighbours: Coordinate[] = this.getNeighbours(row, col, this.state.letters[row][col])
-        console.log(neighbours)
+        let selected: boolean[][] = Array(8).fill(null).map(() => Array(16).fill(false))
+        neighbours.forEach((node: Coordinate) => {selected[node.row][node.col] = true})
+        this.setState({selected})
     }
 
     getNeighbours(row: number, col: number, letter: string): Coordinate[] {
