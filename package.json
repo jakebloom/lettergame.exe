@@ -1,0 +1,24 @@
+{
+  "name": "lettergame",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jake Bloom",
+  "license": "ISC",
+  "dependencies": {
+    "npm": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.11",
+    "@types/react-dom": "^16.0.7",
+    "awesome-typescript-loader": "^5.2.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.0.1",
+    "webpack-command": "^0.4.1"
+  }
+}
