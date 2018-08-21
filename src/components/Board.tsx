@@ -80,13 +80,15 @@ export default class Board extends React.Component<{}, BoardState> {
     }
 
     consolidate(letters: string[][]): string[][] {
-        // drop rows down
-        for (let col = 0; col < this.NUM_COLS; col++) {
+        let highCol: number = this.NUM_COLS
+        let col: number = 0
+        while (col < highCol) {
+            // drop rows down
             let lowLimit: number = 0
             let row: number = this.NUM_ROWS - 1
             while (row > lowLimit) {
                 if (letters[row][col] == null) {
-                    for (let currRow = row; currRow > 0; currRow--) {
+                    for (let currRow: number = row; currRow > lowLimit; currRow--) {
                         letters[currRow][col] = letters[currRow - 1][col]
                     }
                     letters[0][col] = null
@@ -95,9 +97,26 @@ export default class Board extends React.Component<{}, BoardState> {
                     row--
                 }
             }
-        }
-        // move columns accross
 
+            // move columns accross
+            let empty: boolean = true
+            for (let row: number = 0; row < this.NUM_ROWS; row++) {
+                if (letters[row][col] != null) {
+                    empty = false
+                }
+            }
+
+            if (empty) {
+                for (let currCol: number = col; currCol < highCol - 1; currCol++) {
+                    for (let row: number = 0; row < this.NUM_ROWS; row++) {
+                        letters[row][currCol] = letters[row][currCol + 1]
+                    }
+                }
+                highCol--
+            } else {
+                col++
+            }
+        }
         return letters;
     }
 

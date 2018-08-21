@@ -20075,13 +20075,15 @@ class Board extends React.Component {
         return this.OPTIONS[index];
     }
     consolidate(letters) {
-        // drop rows down
-        for (let col = 0; col < this.NUM_COLS; col++) {
+        let highCol = this.NUM_COLS;
+        let col = 0;
+        while (col < highCol) {
+            // drop rows down
             let lowLimit = 0;
             let row = this.NUM_ROWS - 1;
             while (row > lowLimit) {
                 if (letters[row][col] == null) {
-                    for (let currRow = row; currRow > 0; currRow--) {
+                    for (let currRow = row; currRow > lowLimit; currRow--) {
                         letters[currRow][col] = letters[currRow - 1][col];
                     }
                     letters[0][col] = null;
@@ -20091,8 +20093,25 @@ class Board extends React.Component {
                     row--;
                 }
             }
+            // move columns accross
+            let empty = true;
+            for (let row = 0; row < this.NUM_ROWS; row++) {
+                if (letters[row][col] != null) {
+                    empty = false;
+                }
+            }
+            if (empty) {
+                for (let currCol = col; currCol < highCol - 1; currCol++) {
+                    for (let row = 0; row < this.NUM_ROWS; row++) {
+                        letters[row][currCol] = letters[row][currCol + 1];
+                    }
+                }
+                highCol--;
+            }
+            else {
+                col++;
+            }
         }
-        // move columns accross
         return letters;
     }
     getNeighbours(row, col, letter) {
