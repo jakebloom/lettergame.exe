@@ -1,7 +1,11 @@
 .letter {
-    padding: 5px;
+    display: inline-block;
     font-family: monospace;
     font-size: 50px;
+    height: 40px;
+    padding: 5px;
+    user-select: none;
+    width: 40px;
 }
 
 .selected {

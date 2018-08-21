@@ -14,19 +14,18 @@ interface Coordinate {
 
 export default class Board extends React.Component<{}, BoardState> {
     OPTIONS = ["A", "B", "C", "D", "E"]
+    NUM_ROWS = 8
+    NUM_COLS = 16
 
     componentWillMount(){
-        let letters: string[][] = [] 
-        let selected: boolean[][] = []
+        let letters: string[][] = []
+        let selected: boolean[][] = Array(8).fill(null).map(() => Array(16).fill(false))
         for (let row = 0; row < 8; row++) {
             let letterRow: string[] = []
-            let selectedRow: boolean[] = []
             for (let col = 0; col < 16; col++) {
                 letterRow.push(this.randomChoice())
-                selectedRow.push(false)
             }
             letters.push(letterRow)
-            selected.push(selectedRow)
         }
 
         this.setState({letters, selected})
@@ -61,10 +60,45 @@ export default class Board extends React.Component<{}, BoardState> {
         if (this.state.letters[row][col] == null) {
             return
         }
+
         let neighbours: Coordinate[] = this.getNeighbours(row, col, this.state.letters[row][col])
         let selected: boolean[][] = Array(8).fill(null).map(() => Array(16).fill(false))
-        neighbours.forEach((node: Coordinate) => {selected[node.row][node.col] = true})
-        this.setState({selected})
+        let letters: string[][] = this.state.letters
+
+        if (this.state.selected[row][col]) {
+            neighbours.forEach((node: Coordinate) => {
+                selected[node.row][node.col] = false
+                letters[node.row][node.col] = null
+            })
+
+        } else if (neighbours.length > 1) {
+            neighbours.forEach((node: Coordinate) => {selected[node.row][node.col] = true})
+        }
+
+        letters = this.consolidate(letters)
+        this.setState({letters, selected})
+    }
+
+    consolidate(letters: string[][]): string[][] {
+        // drop rows down
+        for (let col = 0; col < this.NUM_COLS; col++) {
+            let lowLimit: number = 0
+            let row: number = this.NUM_ROWS - 1
+            while (row > lowLimit) {
+                if (letters[row][col] == null) {
+                    for (let currRow = row; currRow > 0; currRow--) {
+                        letters[currRow][col] = letters[currRow - 1][col]
+                    }
+                    letters[0][col] = null
+                    lowLimit++
+                } else {
+                    row--
+                }
+            }
+        }
+        // move columns accross
+
+        return letters;
     }
 
     getNeighbours(row: number, col: number, letter: string): Coordinate[] {

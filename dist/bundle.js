@@ -20025,28 +20025,37 @@ class Board extends React.Component {
     constructor() {
         super(...arguments);
         this.OPTIONS = ["A", "B", "C", "D", "E"];
+        this.NUM_ROWS = 8;
+        this.NUM_COLS = 16;
         this.onLetterClick = (row, col) => {
             if (this.state.letters[row][col] == null) {
                 return;
             }
             let neighbours = this.getNeighbours(row, col, this.state.letters[row][col]);
             let selected = Array(8).fill(null).map(() => Array(16).fill(false));
-            neighbours.forEach((node) => { selected[node.row][node.col] = true; });
-            this.setState({ selected });
+            let letters = this.state.letters;
+            if (this.state.selected[row][col]) {
+                neighbours.forEach((node) => {
+                    selected[node.row][node.col] = false;
+                    letters[node.row][node.col] = null;
+                });
+            }
+            else if (neighbours.length > 1) {
+                neighbours.forEach((node) => { selected[node.row][node.col] = true; });
+            }
+            letters = this.consolidate(letters);
+            this.setState({ letters, selected });
         };
     }
     componentWillMount() {
         let letters = [];
-        let selected = [];
+        let selected = Array(8).fill(null).map(() => Array(16).fill(false));
         for (let row = 0; row < 8; row++) {
             let letterRow = [];
-            let selectedRow = [];
             for (let col = 0; col < 16; col++) {
                 letterRow.push(this.randomChoice());
-                selectedRow.push(false);
             }
             letters.push(letterRow);
-            selected.push(selectedRow);
         }
         this.setState({ letters, selected });
     }
@@ -20064,6 +20073,27 @@ class Board extends React.Component {
     randomChoice() {
         let index = Math.floor(Math.random() * this.OPTIONS.length);
         return this.OPTIONS[index];
+    }
+    consolidate(letters) {
+        // drop rows down
+        for (let col = 0; col < this.NUM_COLS; col++) {
+            let lowLimit = 0;
+            let row = this.NUM_ROWS - 1;
+            while (row > lowLimit) {
+                if (letters[row][col] == null) {
+                    for (let currRow = row; currRow > 0; currRow--) {
+                        letters[currRow][col] = letters[currRow - 1][col];
+                    }
+                    letters[0][col] = null;
+                    lowLimit++;
+                }
+                else {
+                    row--;
+                }
+            }
+        }
+        // move columns accross
+        return letters;
     }
     getNeighbours(row, col, letter) {
         let stack = [{ row, col }];
