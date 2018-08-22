@@ -4,7 +4,10 @@ import Letter from "./Letter"
 
 interface BoardState {
     letters: string[][],
-    selected: boolean[][]
+    selected: boolean[][],
+    mark: number,
+    point: number,
+    score: number
 }
 
 interface Coordinate {
@@ -14,28 +17,32 @@ interface Coordinate {
 
 export default class Board extends React.Component<{}, BoardState> {
     OPTIONS = ["A", "B", "C", "D", "E"]
-    NUM_ROWS = 8
-    NUM_COLS = 16
+    NUM_ROWS = 10
+    NUM_COLS = 20
 
     componentWillMount(){
         let letters: string[][] = []
-        let selected: boolean[][] = Array(8).fill(null).map(() => Array(16).fill(false))
-        for (let row = 0; row < 8; row++) {
+        let selected: boolean[][] = Array(this.NUM_ROWS).fill(null).map(() => Array(this.NUM_COLS).fill(false))
+        let mark: number = 0
+        let point: number = 0
+        let score: number = 0
+
+        for (let row = 0; row < this.NUM_ROWS; row++) {
             let letterRow: string[] = []
-            for (let col = 0; col < 16; col++) {
+            for (let col = 0; col < this.NUM_COLS; col++) {
                 letterRow.push(this.randomChoice())
             }
             letters.push(letterRow)
         }
 
-        this.setState({letters, selected})
+        this.setState({letters, selected, mark, point, score})
     }
 
     render() {
         let tiles = []
-        for (let row = 0; row < 8; row++) {
+        for (let row = 0; row < this.NUM_ROWS; row++) {
               let tilerow = []
-              for (let col = 0; col < 16; col++) {
+              for (let col = 0; col < this.NUM_COLS; col++) {
                     tilerow.push(
                       <Letter 
                           col={col}
@@ -49,9 +56,11 @@ export default class Board extends React.Component<{}, BoardState> {
               tiles.push(tilerow)
         }
         return <div className="board">
-            {tiles.map(row => <div>{row}</div>)}
-            <div className="scoreBar">
-                Mark : 0 (Point : 0) Score 0
+            <div className="boardContent">
+                {tiles.map(row => <div>{row}</div>)}
+                <div className="scoreBar">
+                    Mark : {this.state.mark} (Point : {this.state.point}) Score {this.state.score}
+                </div>
             </div>
         </div>
     }
@@ -62,12 +71,13 @@ export default class Board extends React.Component<{}, BoardState> {
     }
 
     onLetterClick = (row: number, col: number): void => {
+        let mark: number = 0
         if (this.state.letters[row][col] == null) {
             return
         }
 
         let neighbours: Coordinate[] = this.getNeighbours(row, col, this.state.letters[row][col])
-        let selected: boolean[][] = Array(8).fill(null).map(() => Array(16).fill(false))
+        let selected: boolean[][] = Array(this.NUM_ROWS).fill(null).map(() => Array(this.NUM_COLS).fill(false))
         let letters: string[][] = this.state.letters
 
         if (this.state.selected[row][col]) {
@@ -75,13 +85,13 @@ export default class Board extends React.Component<{}, BoardState> {
                 selected[node.row][node.col] = false
                 letters[node.row][node.col] = null
             })
-
         } else if (neighbours.length > 1) {
             neighbours.forEach((node: Coordinate) => {selected[node.row][node.col] = true})
+            mark = neighbours.length
         }
 
         letters = this.consolidate(letters)
-        this.setState({letters, selected})
+        this.setState({letters, selected, mark})
     }
 
     consolidate(letters: string[][]): string[][] {
@@ -142,7 +152,7 @@ export default class Board extends React.Component<{}, BoardState> {
             }
 
             if (
-                curr.row != 7 &&
+                curr.row != this.NUM_ROWS - 1 &&
                 this.state.letters[curr.row + 1][curr.col] == letter &&
                 !this.checkInclusion(neighbours, curr.row + 1, curr.col)
             ) {
@@ -160,7 +170,7 @@ export default class Board extends React.Component<{}, BoardState> {
             }
 
             if (
-                curr.col != 15 &&
+                curr.col != this.NUM_COLS - 1 &&
                 this.state.letters[curr.row][curr.col + 1] == letter &&
                 !this.checkInclusion(neighbours, curr.row, curr.col + 1)
             ) {

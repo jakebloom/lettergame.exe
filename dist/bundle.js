@@ -20005,9 +20005,15 @@ class App extends React.Component {
             React.createElement("div", { className: "titleBar" }, "Same Game for Windows"),
             React.createElement("div", { className: "toolBar" },
                 React.createElement("ul", null,
-                    React.createElement("li", null, "Menu"),
-                    React.createElement("li", null, "Option"),
-                    React.createElement("li", null, "Help"))),
+                    React.createElement("li", null,
+                        React.createElement("u", null, "M"),
+                        "enu"),
+                    React.createElement("li", null,
+                        React.createElement("u", null, "O"),
+                        "ption"),
+                    React.createElement("li", null,
+                        React.createElement("u", null, "H"),
+                        "elp"))),
             React.createElement(Board_1.default, null));
     }
 }
@@ -20032,14 +20038,15 @@ class Board extends React.Component {
     constructor() {
         super(...arguments);
         this.OPTIONS = ["A", "B", "C", "D", "E"];
-        this.NUM_ROWS = 8;
-        this.NUM_COLS = 16;
+        this.NUM_ROWS = 10;
+        this.NUM_COLS = 20;
         this.onLetterClick = (row, col) => {
+            let mark = 0;
             if (this.state.letters[row][col] == null) {
                 return;
             }
             let neighbours = this.getNeighbours(row, col, this.state.letters[row][col]);
-            let selected = Array(8).fill(null).map(() => Array(16).fill(false));
+            let selected = Array(this.NUM_ROWS).fill(null).map(() => Array(this.NUM_COLS).fill(false));
             let letters = this.state.letters;
             if (this.state.selected[row][col]) {
                 neighbours.forEach((node) => {
@@ -20049,35 +20056,46 @@ class Board extends React.Component {
             }
             else if (neighbours.length > 1) {
                 neighbours.forEach((node) => { selected[node.row][node.col] = true; });
+                mark = neighbours.length;
             }
             letters = this.consolidate(letters);
-            this.setState({ letters, selected });
+            this.setState({ letters, selected, mark });
         };
     }
     componentWillMount() {
         let letters = [];
-        let selected = Array(8).fill(null).map(() => Array(16).fill(false));
-        for (let row = 0; row < 8; row++) {
+        let selected = Array(this.NUM_ROWS).fill(null).map(() => Array(this.NUM_COLS).fill(false));
+        let mark = 0;
+        let point = 0;
+        let score = 0;
+        for (let row = 0; row < this.NUM_ROWS; row++) {
             let letterRow = [];
-            for (let col = 0; col < 16; col++) {
+            for (let col = 0; col < this.NUM_COLS; col++) {
                 letterRow.push(this.randomChoice());
             }
             letters.push(letterRow);
         }
-        this.setState({ letters, selected });
+        this.setState({ letters, selected, mark, point, score });
     }
     render() {
         let tiles = [];
-        for (let row = 0; row < 8; row++) {
+        for (let row = 0; row < this.NUM_ROWS; row++) {
             let tilerow = [];
-            for (let col = 0; col < 16; col++) {
+            for (let col = 0; col < this.NUM_COLS; col++) {
                 tilerow.push(React.createElement(Letter_1.default, { col: col, key: String(row) + "." + String(col), letter: this.state.letters[row][col], onclick: this.onLetterClick, row: row, selected: this.state.selected[row][col] }));
             }
             tiles.push(tilerow);
         }
         return React.createElement("div", { className: "board" },
-            tiles.map(row => React.createElement("div", null, row)),
-            React.createElement("div", { className: "scoreBar" }, "Mark : 0 (Point : 0) Score 0"));
+            React.createElement("div", { className: "boardContent" },
+                tiles.map(row => React.createElement("div", null, row)),
+                React.createElement("div", { className: "scoreBar" },
+                    "Mark : ",
+                    this.state.mark,
+                    " (Point : ",
+                    this.state.point,
+                    ") Score ",
+                    this.state.score)));
     }
     randomChoice() {
         let index = Math.floor(Math.random() * this.OPTIONS.length);
@@ -20134,7 +20152,7 @@ class Board extends React.Component {
                 neighbours.push({ row: curr.row - 1, col: curr.col });
                 stack.push({ row: curr.row - 1, col: curr.col });
             }
-            if (curr.row != 7 &&
+            if (curr.row != this.NUM_ROWS - 1 &&
                 this.state.letters[curr.row + 1][curr.col] == letter &&
                 !this.checkInclusion(neighbours, curr.row + 1, curr.col)) {
                 neighbours.push({ row: curr.row + 1, col: curr.col });
@@ -20146,7 +20164,7 @@ class Board extends React.Component {
                 neighbours.push({ row: curr.row, col: curr.col - 1 });
                 stack.push({ row: curr.row, col: curr.col - 1 });
             }
-            if (curr.col != 15 &&
+            if (curr.col != this.NUM_COLS - 1 &&
                 this.state.letters[curr.row][curr.col + 1] == letter &&
                 !this.checkInclusion(neighbours, curr.row, curr.col + 1)) {
                 neighbours.push({ row: curr.row, col: curr.col + 1 });

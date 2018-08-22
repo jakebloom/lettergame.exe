@@ -9,9 +9,9 @@ export default class App extends React.Component<{}, {}> {
         <div className="titleBar">Same Game for Windows</div>
         <div className="toolBar">
             <ul>
-                <li>Menu</li>
-                <li>Option</li>
-                <li>Help</li>
+                <li><u>M</u>enu</li>
+                <li><u>O</u>ption</li>
+                <li><u>H</u>elp</li>
             </ul>
         </div>
         <Board />
