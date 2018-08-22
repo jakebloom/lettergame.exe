@@ -10,7 +10,17 @@ interface LetterProps {
 
 export default class Letter extends React.Component<LetterProps, {}> {
     render() {
-        let classes: string = this.props.selected ? "letter selected" : "letter"
+        let classes: string = "letter"
+        if (this.props.letter !== null) {
+            classes += " letterBorder " + this.props.letter
+        } else {
+            classes += " empty"
+        }
+
+        if (this.props.selected) {
+            classes += " selected"
+        }
+
         return <span 
             className={classes}
             onClick={() => this.props.onclick(

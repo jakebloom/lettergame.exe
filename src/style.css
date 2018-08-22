@@ -1,13 +1,103 @@
+body {
+    font-family: "Lucida Console", monospace;
+}
+
+#root {
+    background-color: #0F8013;
+}
+
 .letter {
+    border: 2px;
     display: inline-block;
-    font-family: monospace;
-    font-size: 50px;
+    font-size: 40px;
     height: 40px;
     padding: 5px;
+    text-align: center;
     user-select: none;
     width: 40px;
 }
 
+.letterBorder {
+    border-style: inset;
+}
+
+.A {
+    /*14, 39, 251*/
+    background-color: #0E33FB;
+}
+
+.B {
+    /*252, 16, 29*/
+    background-color: #FC101D;
+}
+
+.C {
+    /*253, 42, 252*/
+    background-color: #FD2AFC;
+}
+
+.D {
+    /* 255, 253, 57 */
+    background-color: #FFFD39;
+}
+
+.E {
+    /* 45, 255, 254 */
+    background-color: #2DFFFE;
+}
+
+.selected.A {
+    /*14, 39, 251*/
+    color: #0E33FB;
+}
+
+.selected.B {
+    /*252, 16, 29*/
+    color: #FC101D;
+}
+
+.selected.C {
+    /*253, 42, 252*/
+    color: #FD2AFC;
+}
+
+.selected.D {
+    /* 255, 253, 57 */
+    color: #FFFD39;
+}
+
+.selected.E {
+    /* 45, 255, 254 */
+    color: #2DFFFE;
+}
+
 .selected {
-    border: 2px solid;
+    background-color: #FFFFFF;
+}
+
+.empty {
+    height: 0px;
+    margin: 2px;
+}
+
+.scoreBar {
+    background-color: #FFFFFF;
+    border-top: 1px solid;
+    padding: 2px;
+}
+
+.titleBar {
+    /* 12, 56, 151 */
+    background-color: #0C3897;
+    color: #FFFFFF;
+    padding: 5px;
+}
+
+.toolBar {
+    background-color: #FFFFFF;
+    padding: 2px;
+}
+
+.container {
+    border: 1px solid;
 }

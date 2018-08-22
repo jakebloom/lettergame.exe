@@ -20001,7 +20001,10 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const Board_1 = __webpack_require__(/*! ./Board */ "./src/components/Board.tsx");
 class App extends React.Component {
     render() {
-        return React.createElement(Board_1.default, null);
+        return React.createElement("div", { className: "container" },
+            React.createElement("div", { className: "titleBar" }, "Same Game for Windows"),
+            React.createElement("div", { className: "toolBar" }, "Menu Option Help"),
+            React.createElement(Board_1.default, null));
     }
 }
 exports.default = App;
@@ -20068,7 +20071,9 @@ class Board extends React.Component {
             }
             tiles.push(tilerow);
         }
-        return tiles.map(row => React.createElement("div", null, row));
+        return React.createElement("div", { className: "board" },
+            tiles.map(row => React.createElement("div", null, row)),
+            React.createElement("div", { className: "scoreBar" }, "Mark : 0 (Point : 0) Score 0"));
     }
     randomChoice() {
         let index = Math.floor(Math.random() * this.OPTIONS.length);
@@ -20173,7 +20178,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 class Letter extends React.Component {
     render() {
-        let classes = this.props.selected ? "letter selected" : "letter";
+        let classes = "letter";
+        if (this.props.letter !== null) {
+            classes += " letterBorder " + this.props.letter;
+        }
+        else {
+            classes += " empty";
+        }
+        if (this.props.selected) {
+            classes += " selected";
+        }
         return React.createElement("span", { className: classes, onClick: () => this.props.onclick(this.props.row, this.props.col, this.props.letter) }, this.props.letter);
     }
 }

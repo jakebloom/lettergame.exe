@@ -32,23 +32,28 @@ export default class Board extends React.Component<{}, BoardState> {
     }
 
     render() {
-      let tiles = []
-      for (let row = 0; row < 8; row++) {
-            let tilerow = []
-            for (let col = 0; col < 16; col++) {
-                  tilerow.push(
-                    <Letter 
-                        col={col}
-                        key={String(row) + "." + String(col)}
-                        letter={this.state.letters[row][col]}
-                        onclick={this.onLetterClick}
-                        row={row}
-                        selected={this.state.selected[row][col]}/>
-                  )
-            }
-            tiles.push(tilerow)
-      }
-      return tiles.map(row => <div>{row}</div>)
+        let tiles = []
+        for (let row = 0; row < 8; row++) {
+              let tilerow = []
+              for (let col = 0; col < 16; col++) {
+                    tilerow.push(
+                      <Letter 
+                          col={col}
+                          key={String(row) + "." + String(col)}
+                          letter={this.state.letters[row][col]}
+                          onclick={this.onLetterClick}
+                          row={row}
+                          selected={this.state.selected[row][col]}/>
+                    )
+              }
+              tiles.push(tilerow)
+        }
+        return <div className="board">
+            {tiles.map(row => <div>{row}</div>)}
+            <div className="scoreBar">
+                Mark : 0 (Point : 0) Score 0
+            </div>
+        </div>
     }
 
     randomChoice(): string {
