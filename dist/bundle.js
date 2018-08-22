@@ -20003,7 +20003,11 @@ class App extends React.Component {
     render() {
         return React.createElement("div", { className: "container" },
             React.createElement("div", { className: "titleBar" }, "Same Game for Windows"),
-            React.createElement("div", { className: "toolBar" }, "Menu Option Help"),
+            React.createElement("div", { className: "toolBar" },
+                React.createElement("ul", null,
+                    React.createElement("li", null, "Menu"),
+                    React.createElement("li", null, "Option"),
+                    React.createElement("li", null, "Help"))),
             React.createElement(Board_1.default, null));
     }
 }
