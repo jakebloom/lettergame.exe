@@ -72,6 +72,8 @@ export default class Board extends React.Component<{}, BoardState> {
 
     onLetterClick = (row: number, col: number): void => {
         let mark: number = 0
+        let score: number = this.state.score
+        let point: number = 0
         if (this.state.letters[row][col] == null) {
             return
         }
@@ -85,13 +87,15 @@ export default class Board extends React.Component<{}, BoardState> {
                 selected[node.row][node.col] = false
                 letters[node.row][node.col] = null
             })
+            score += this.state.point
         } else if (neighbours.length > 1) {
             neighbours.forEach((node: Coordinate) => {selected[node.row][node.col] = true})
             mark = neighbours.length
+            point = mark * mark - 3 * mark + 4
         }
 
         letters = this.consolidate(letters)
-        this.setState({letters, selected, mark})
+        this.setState({letters, selected, mark, point, score})
     }
 
     consolidate(letters: string[][]): string[][] {
@@ -126,6 +130,9 @@ export default class Board extends React.Component<{}, BoardState> {
                     for (let row: number = 0; row < this.NUM_ROWS; row++) {
                         letters[row][currCol] = letters[row][currCol + 1]
                     }
+                }
+                for (let row: number = 0; row < this.NUM_ROWS; row++) {
+                    letters[row][this.NUM_COLS - 1] = null
                 }
                 highCol--
             } else {
