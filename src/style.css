@@ -112,3 +112,13 @@ li {
 .container {
     border: 1px solid;
 }
+
+.board {
+    display: flex;
+    align-items: flex-end;
+    min-height: 560px;
+}
+
+.boardContent {
+    width: 100%;
+}
