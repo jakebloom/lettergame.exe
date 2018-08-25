@@ -122,3 +122,15 @@ li {
 .boardContent {
     width: 100%;
 }
+
+.modal {
+    position: fixed;
+    top: 100;
+    z-index: 1;
+}
+
+.nameInput {
+    border: none;
+    border-bottom: 1px solid;
+    outline-width: 0px;
+}

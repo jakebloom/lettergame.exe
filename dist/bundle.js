@@ -19999,6 +19999,7 @@ if (false) {} else {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const Board_1 = __webpack_require__(/*! ./Board */ "./src/components/Board.tsx");
+const Dialog_1 = __webpack_require__(/*! ./Dialog */ "./src/components/Dialog.tsx");
 class App extends React.Component {
     render() {
         return React.createElement("div", { className: "container" },
@@ -20014,7 +20015,8 @@ class App extends React.Component {
                     React.createElement("li", null,
                         React.createElement("u", null, "H"),
                         "elp"))),
-            React.createElement(Board_1.default, null));
+            React.createElement(Board_1.default, null),
+            React.createElement(Dialog_1.default, { open: true, score: 420 }));
     }
 }
 exports.default = App;
@@ -20098,7 +20100,7 @@ class Board extends React.Component {
                     this.state.mark,
                     " (Point : ",
                     this.state.point,
-                    ") Score ",
+                    ") Score : ",
                     this.state.score)));
     }
     randomChoice() {
@@ -20190,6 +20192,56 @@ class Board extends React.Component {
     }
 }
 exports.default = Board;
+
+
+/***/ }),
+
+/***/ "./src/components/Dialog.tsx":
+/*!***********************************!*\
+  !*** ./src/components/Dialog.tsx ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class Dialog extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.onKeyPress = (e) => {
+            if (e.key === 'Enter') {
+                let scores = this.state.scores;
+                scores.push({ name: e.currentTarget.value, score: this.props.score });
+                scores.sort((a, b) => b.score - a.score);
+                localStorage.setItem("lettergame_scores", JSON.stringify(scores));
+                this.setState({ scores, submitted: true });
+            }
+        };
+    }
+    componentWillMount() {
+        let scores = JSON.parse(localStorage.getItem("lettergame_scores")) || [];
+        scores = scores.sort((a, b) => b.score - a.score);
+        this.setState({ scores, submitted: false });
+    }
+    render() {
+        return React.createElement("dialog", { className: "modal", open: this.props.open },
+            React.createElement("p", null,
+                "Game Over. Your score is ",
+                this.props.score),
+            React.createElement("p", null,
+                "Enter Name:",
+                React.createElement("input", { className: "nameInput", type: "text", onKeyPress: this.onKeyPress, disabled: this.state.submitted })),
+            React.createElement("div", null, this.state.scores.map((score, idx) => React.createElement("div", { key: "score" + idx },
+                idx + 1,
+                ": ",
+                score.name,
+                " ",
+                score.score))));
+    }
+}
+exports.default = Dialog;
 
 
 /***/ }),

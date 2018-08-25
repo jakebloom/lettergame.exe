@@ -59,7 +59,7 @@ export default class Board extends React.Component<{}, BoardState> {
             <div className="boardContent">
                 {tiles.map(row => <div>{row}</div>)}
                 <div className="scoreBar">
-                    Mark : {this.state.mark} (Point : {this.state.point}) Score {this.state.score}
+                    Mark : {this.state.mark} (Point : {this.state.point}) Score : {this.state.score}
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import Board from "./Board"
+import Dialog from "./Dialog"
 
 export default class App extends React.Component<{}, {}> {
 
@@ -15,6 +16,7 @@ export default class App extends React.Component<{}, {}> {
             </ul>
         </div>
         <Board />
+        <Dialog open={true} score={420} />
       </div>
   }
 }
