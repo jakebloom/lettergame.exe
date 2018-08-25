@@ -22,12 +22,17 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
         this.setState({scores, submitted: false})
     }
 
+    componentDidMount() {
+        document.getElementById("nameInput").focus()
+    }
+
     render() {
         return <dialog className="modal" open={this.props.open}>
             <p>Game Over. Your score is {this.props.score}</p>
             <p>
                 Enter Name:
                 <input 
+                    id="nameInput"
                     className="nameInput"
                     type="text"
                     onKeyPress={this.onKeyPress}
@@ -38,6 +43,9 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
                     (score: Score, idx: number) =>
                         <div key={"score" + idx}>{idx + 1}: {score.name} {score.score}</div>
                 )}
+            </div>
+            <div className="buttonContainer">
+                <button className="newGameButton">New Game</button>
             </div>
         </dialog>
     }
