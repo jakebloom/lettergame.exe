@@ -44,9 +44,6 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
                         <div key={"score" + idx}>{idx + 1}: {score.name} {score.score}</div>
                 )}
             </div>
-            <div className="buttonContainer">
-                <button className="newGameButton">New Game</button>
-            </div>
         </dialog>
     }
 

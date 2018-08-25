@@ -20279,9 +20279,7 @@ class Dialog extends React.Component {
                 ": ",
                 score.name,
                 " ",
-                score.score))),
-            React.createElement("div", { className: "buttonContainer" },
-                React.createElement("button", { className: "newGameButton" }, "New Game")));
+                score.score))));
     }
 }
 exports.default = Dialog;

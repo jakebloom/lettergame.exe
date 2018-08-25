@@ -134,14 +134,3 @@ li {
     border-bottom: 1px solid;
     outline-width: 0px;
 }
-
-.buttonContainer {
-    padding-top: 15px;
-    text-align: center;
-}
-
-.newGameButton {
-    border: 1px;
-    border-radius: 0px;
-    border-style: inset;
-}
