@@ -20001,6 +20001,16 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const Board_1 = __webpack_require__(/*! ./Board */ "./src/components/Board.tsx");
 const Dialog_1 = __webpack_require__(/*! ./Dialog */ "./src/components/Dialog.tsx");
 class App extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.onGameOver = (score) => this.setState({ dialogOpen: true, score });
+    }
+    componentWillMount() {
+        this.setState({
+            dialogOpen: false,
+            score: 0
+        });
+    }
     render() {
         return React.createElement("div", { className: "container" },
             React.createElement("div", { className: "titleBar" }, "Same Game for Windows"),
@@ -20015,8 +20025,8 @@ class App extends React.Component {
                     React.createElement("li", null,
                         React.createElement("u", null, "H"),
                         "elp"))),
-            React.createElement(Board_1.default, null),
-            React.createElement(Dialog_1.default, { open: true, score: 420 }));
+            React.createElement(Board_1.default, { onGameOver: this.onGameOver }),
+            React.createElement(Dialog_1.default, { open: this.state.dialogOpen, score: this.state.score }));
     }
 }
 exports.default = App;
@@ -20066,6 +20076,9 @@ class Board extends React.Component {
             }
             letters = this.consolidate(letters);
             this.setState({ letters, selected, mark, point, score });
+            if (!this.isPlayable(letters)) {
+                this.props.onGameOver(score);
+            }
         };
     }
     componentWillMount() {
@@ -20186,6 +20199,31 @@ class Board extends React.Component {
         for (let i = 0; i < a.length; i++) {
             if (a[i].row == row && a[i].col == col) {
                 return true;
+            }
+        }
+        return false;
+    }
+    isPlayable(letters) {
+        for (let row = 0; row < this.NUM_ROWS; row++) {
+            for (let col = 0; col < this.NUM_COLS; col++) {
+                if (letters[row][col] != null) {
+                    if (row !== 0 &&
+                        letters[row][col] === letters[row - 1][col]) {
+                        return true;
+                    }
+                    if (row !== this.NUM_ROWS - 1 &&
+                        letters[row][col] === letters[row + 1][col]) {
+                        return true;
+                    }
+                    if (col !== 0 &&
+                        letters[row][col] === letters[row][col - 1]) {
+                        return true;
+                    }
+                    if (col !== this.NUM_COLS - 1 &&
+                        letters[row][col] === letters[row][col + 1]) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

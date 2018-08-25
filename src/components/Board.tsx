@@ -10,12 +10,16 @@ interface BoardState {
     score: number
 }
 
+interface BoardProps {
+    onGameOver: (score: number) => void
+}
+
 interface Coordinate {
     col: number,
     row: number
 }
 
-export default class Board extends React.Component<{}, BoardState> {
+export default class Board extends React.Component<BoardProps, BoardState> {
     OPTIONS = ["A", "B", "C", "D", "E"]
     NUM_ROWS = 10
     NUM_COLS = 20
@@ -96,6 +100,10 @@ export default class Board extends React.Component<{}, BoardState> {
 
         letters = this.consolidate(letters)
         this.setState({letters, selected, mark, point, score})
+
+        if (!this.isPlayable(letters)) {
+            this.props.onGameOver(score)
+        }
     }
 
     consolidate(letters: string[][]): string[][] {
@@ -194,6 +202,43 @@ export default class Board extends React.Component<{}, BoardState> {
         for (let i = 0; i < a.length; i++) {
             if (a[i].row == row && a[i].col == col) {
                 return true
+            }
+        }
+        return false
+    }
+
+    isPlayable(letters: string[][]): boolean {
+        for (let row: number = 0; row < this.NUM_ROWS; row++) {
+            for (let col: number = 0; col < this.NUM_COLS; col++) {
+                if (letters[row][col] != null) {
+                    if (
+                        row !== 0 && 
+                        letters[row][col] === letters[row - 1][col]
+                    ) {
+                        return true
+                    }
+
+                    if (
+                        row !== this.NUM_ROWS - 1 && 
+                        letters[row][col] === letters[row + 1][col]
+                    ) {
+                        return true
+                    }
+
+                    if (
+                        col !== 0 &&
+                        letters[row][col] === letters[row][col - 1]
+                    ) {
+                        return true
+                    }
+
+                    if (
+                        col !== this.NUM_COLS - 1 &&
+                        letters[row][col] === letters[row][col + 1]
+                    ) {
+                        return true
+                    }
+                }
             }
         }
         return false
