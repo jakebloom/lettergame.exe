@@ -20263,17 +20263,16 @@ class Dialog extends React.Component {
         scores = scores.sort((a, b) => b.score - a.score);
         this.setState({ scores, submitted: false });
     }
-    componentDidMount() {
-        document.getElementById("nameInput").focus();
-    }
     render() {
+        let top20 = this.state.scores.length < 20 || this.props.score > this.state.scores[19].score;
         return React.createElement("dialog", { className: "modal", open: this.props.open },
             React.createElement("p", null,
                 "Game Over. Your score is ",
                 this.props.score),
-            React.createElement("p", null,
-                "Enter Name:",
-                React.createElement("input", { id: "nameInput", className: "nameInput", type: "text", onKeyPress: this.onKeyPress, disabled: this.state.submitted })),
+            top20 &&
+                React.createElement("p", null,
+                    "Enter Name:",
+                    React.createElement("input", { id: "nameInput", className: "nameInput", type: "text", onKeyPress: this.onKeyPress, disabled: this.state.submitted })),
             React.createElement("div", null, this.state.scores.map((score, idx) => React.createElement("div", { key: "score" + idx },
                 idx + 1,
                 ": ",

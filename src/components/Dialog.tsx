@@ -22,22 +22,21 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
         this.setState({scores, submitted: false})
     }
 
-    componentDidMount() {
-        document.getElementById("nameInput").focus()
-    }
-
     render() {
+        let top20: boolean = this.state.scores.length < 20 || this.props.score > this.state.scores[19].score
         return <dialog className="modal" open={this.props.open}>
             <p>Game Over. Your score is {this.props.score}</p>
-            <p>
-                Enter Name:
-                <input 
-                    id="nameInput"
-                    className="nameInput"
-                    type="text"
-                    onKeyPress={this.onKeyPress}
-                    disabled={this.state.submitted}/>
-            </p>
+            {top20 &&
+                <p>
+                    Enter Name:
+                    <input 
+                        id="nameInput"
+                        className="nameInput"
+                        type="text"
+                        onKeyPress={this.onKeyPress}
+                        disabled={this.state.submitted}/>
+                </p>
+            }
             <div>
                 {this.state.scores.map(
                     (score: Score, idx: number) =>
