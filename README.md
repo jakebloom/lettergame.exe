@@ -16,3 +16,5 @@ $ npm install --dev
 $ webpack # this builds the project
 ```
 Then open up `index.html` in your browser and you're good to go!
+
+You can play this version online by going to [letters.jakebloom.me](http://letters.jakebloom.me) or [jakebloom.me/lettergame.exe](http://jakebloom.me/lettergame.exe)
